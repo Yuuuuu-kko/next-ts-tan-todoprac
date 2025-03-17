@@ -1,0 +1,28 @@
+{
+  "todos": [
+    {
+      "id": 1,
+      "title": "리액트 Todo Prac",
+      "contents": "연습만이 살길..",
+      "isDone": false
+    },
+    {
+      "id": 2,
+      "title": "노드도 같이 Prac",
+      "contents": "연습만이 살길..",
+      "isDone": false
+    },
+    {
+      "id": 3,
+      "title": "TS Prac",
+      "contents": "연습만이 살길..",
+      "isDone": false
+    },
+    {
+      "id": 4,
+      "title": "Soring Prac",
+      "contents": "연습만이 살길..",
+      "isDone": false
+    }
+  ]
+}
