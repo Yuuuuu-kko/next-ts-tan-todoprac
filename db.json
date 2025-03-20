@@ -1,22 +1,10 @@
 {
   "todos": [
     {
-      "id": "1",
-      "title": "리액트 Todo Prac",
-      "contents": "연습만이 살길..",
-      "isDone": false
-    },
-    {
-      "id": "ee77",
-      "title": "클론코딩",
-      "contents": "어서 끝내고 혼자 다시 타이핑!!",
-      "isDone": false
-    },
-    {
-      "id": "d6f4",
-      "title": "잠",
-      "contents": "온다",
-      "isDone": false
+      "id": "1e68",
+      "title": "id가",
+      "contents": "없었구나",
+      "isDone": true
     }
   ]
 }
