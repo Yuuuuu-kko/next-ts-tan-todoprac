@@ -1,40 +1,28 @@
 "use client";
 
-import { useMutation, useMutationState, useQuery } from "@tanstack/react-query";
+import { useAddTodo } from "@/hooks/mutations";
+import { useTodos } from "@/hooks/queries";
+import {
+  useMutation,
+  useMutationState,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { isError } from "node:util";
-import React from "react";
-
-// type명시
-type Todo = {
-  id: number;
-  title: string;
-  contents: string;
-  isDone: boolean;
-};
+import React, { useState } from "react";
 
 const TodoListPage = () => {
-  const {
-    data: todos,
-    isPending,
-    isError,
-  } = useQuery<Todo[]>({
-    queryKey: ["todos"],
-    queryFn: async () => {
-      const res = await fetch("http://localhost:4000/todos");
-      const data = await res.json();
-      return data;
-    },
-  });
+  //  const queryClient = useQueryClient(); // 동기화시켜주는 코드랑 세트 new아니고 use!!
 
-  const addMutation = useMutationState({
-    mutationFn: async (todo: Todo) => {
-      const res = await fetch("http://localhost:4000/todos", {
-        method: "POST",
-        body: JSON.stringify(todo),
-      });
-      return res.json();
-    },
-  });
+  const [title, setTitle] = useState("");
+  const [contents, setContents] = useState("");
+
+  const { data: todos, isPending, isError } = useTodos();
+
+  // const addMutation = useMutation({
+
+  // 구조분해할당 : addTodo는 명시적으로 쓰기위해 이름 붙이기 // obj 객체니까 mutate만 쓸거면 구조분해할당한것
+  const { mutate: addTodo } = useAddTodo();
 
   if (isPending) {
     return <div>Loading...</div>;
@@ -45,6 +33,12 @@ const TodoListPage = () => {
     return <div>Error...</div>;
   }
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    addTodo({ title, contents, isDone: false });
+  };
+
   return (
     <div>
       <h1>Next TodoList</h1>
@@ -52,10 +46,28 @@ const TodoListPage = () => {
       <div>
         <h3>완료목록</h3>
 
-        <div>
-          <input type="text" placeholder="제목" />
-          <input type="text" placeholder="내용" />
-        </div>
+        <form className="flex gap=2" onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="제목"
+            className="border boerder-gray-300 p-4 rounded-md mb-2"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="내용"
+            className="border boerder-gray-300 p-4 rounded-md mb-2"
+            value={contents}
+            onChange={(e) => setContents(e.target.value)}
+          />
+          <button
+            type="submit"
+            className="border boerder-gray-300 p-4 rounded-md mb-2"
+          >
+            추가
+          </button>
+        </form>
 
         {todos
           .filter((todo) => todo.isDone === true)
