@@ -1,6 +1,6 @@
 import React from "react";
 import { useTodos } from "@/hooks/queries";
-import { useDeleteTodo, useSwichTodo } from "@/hooks/mutations";
+import { useDeleteTodo, useSwitchTodo } from "@/hooks/mutations";
 
 // import { Todo } from "@/types"; // 바로 아래의 이유로 필요없어짐
 
@@ -22,7 +22,7 @@ import { useDeleteTodo, useSwichTodo } from "@/hooks/mutations";
 
 const List = ({ listFor }: { listFor: "done" | "todo" }) => {
   const { data: todos, isPending, isError } = useTodos();
-  const { mutate: switchTodo } = useSwichTodo();
+  const { mutate: switchTodo } = useSwitchTodo();
   const { mutate: deleteTodo } = useDeleteTodo();
 
   const handleSwitch = ({
