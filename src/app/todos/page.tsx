@@ -16,29 +16,15 @@ import React, { useState } from "react";
 const TodoListPage = () => {
   //  const queryClient = useQueryClient(); // 동기화시켜주는 코드랑 세트 new아니고 use!!
 
-  const [title, setTitle] = useState("");
-  const [contents, setContents] = useState("");
-
-  // const addMutation = useMutation({
-  // 구조분해할당 : addTodo는 명시적으로 쓰기위해 이름 붙이기 // obj 객체니까 mutate만 쓸거면 구조분해할당한것
-  const { mutate: addTodo } = useAddTodo();
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    addTodo({ title, contents, isDone: false });
-  };
-
   return (
     <div>
       <h1>Next TodoList</h1>
 
       <TodoForm
-        title={title}
-        contents={contents}
-        setTitle={setTitle}
-        setContents={setContents}
-        handleSubmit={handleSubmit}
+      // title={title}
+      // contents={contents}
+      // setTitle={setTitle}
+      // setContents={setContents}
       />
 
       {/* 하나의 component를 두번 재활용하였다 */}
