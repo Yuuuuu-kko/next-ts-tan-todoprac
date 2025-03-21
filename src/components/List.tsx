@@ -1,6 +1,6 @@
-import { useDeleteTodo, useSwichTodo } from "@/hooks/mutations";
-import { useTodos } from "@/hooks/queries";
 import React from "react";
+import { useTodos } from "@/hooks/queries";
+import { useDeleteTodo, useSwichTodo } from "@/hooks/mutations";
 
 // import { Todo } from "@/types"; // 바로 아래의 이유로 필요없어짐
 
@@ -24,6 +24,7 @@ const List = ({ listFor }: { listFor: "done" | "todo" }) => {
   const { data: todos, isPending, isError } = useTodos();
   const { mutate: switchTodo } = useSwichTodo();
   const { mutate: deleteTodo } = useDeleteTodo();
+
   const handleSwitch = ({
     todoId,
     isDone,
@@ -42,13 +43,15 @@ const List = ({ listFor }: { listFor: "done" | "todo" }) => {
   };
 
   if (isPending) {
-    return <div>Loading...</div>;
+    return <div>isPending...</div>;
   }
 
   // 아래 todos에 오류뜬 이유는 error일때 보장이 안되니까 isError까지 처리!! error일때는 todos가 undefine일수밖에없다
   if (isError) {
     return <div>Error...</div>;
   }
+
+  console.log(todos);
 
   return (
     <div>
@@ -61,7 +64,7 @@ const List = ({ listFor }: { listFor: "done" | "todo" }) => {
           if (listFor === "done") {
             return todo.isDone === true;
           } else {
-            return !todo.isDone === false;
+            return todo.isDone === false;
           }
         })
         .map((todo) => {
@@ -88,7 +91,7 @@ const List = ({ listFor }: { listFor: "done" | "todo" }) => {
                   {listFor === "done" ? "취소" : "완료"}
                 </button>
                 <button
-                  className="bg-blue-500 text-white px-2 py-1 rounded-md "
+                  className="bg-red-500 text-white px-2 py-1 rounded-md "
                   onClick={() => {
                     handleDelete(todo.id);
                   }}

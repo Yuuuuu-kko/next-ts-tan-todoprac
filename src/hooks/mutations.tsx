@@ -12,8 +12,10 @@ export const useAddTodo = () => {
     }) => {
       const res = await fetch("http://localhost:4000/todos", {
         method: "POST",
-        body: JSON.stringify({ newTodo }),
+        body: JSON.stringify(newTodo),
       });
+      console.log(res);
+
       return res.json();
     },
     // input값에 제목, 타이틀 입력하면 바로 화면에 안뜬다 // 서버가 동기화가 안되어서 // 동기화시켜주는 코드
@@ -23,7 +25,7 @@ export const useAddTodo = () => {
   });
 };
 
-//
+// R c 수정
 export const useSwichTodo = () => {
   const queryClient = useQueryClient();
 

@@ -23,7 +23,6 @@ const TodoForm = () =>
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-
       addTodo({ title, contents, isDone: false });
     };
 
