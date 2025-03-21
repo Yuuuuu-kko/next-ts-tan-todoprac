@@ -1,7 +1,9 @@
 "use client";
 
+import List from "@/components/List";
+import TodoForm from "@/components/TodoForm";
 import { useAddTodo, useDeleteTodo, useSwichTodo } from "@/hooks/mutations";
-import { useTodos } from "@/hooks/queries";
+// import { useTodos } from "@/hooks/queries";
 import {
   useMutation,
   useMutationState,
@@ -16,21 +18,10 @@ const TodoListPage = () => {
 
   const [title, setTitle] = useState("");
   const [contents, setContents] = useState("");
-  const { data: todos, isPending, isError } = useTodos();
+
   // const addMutation = useMutation({
   // 구조분해할당 : addTodo는 명시적으로 쓰기위해 이름 붙이기 // obj 객체니까 mutate만 쓸거면 구조분해할당한것
   const { mutate: addTodo } = useAddTodo();
-  const { mutate: switchTodo } = useSwichTodo();
-  const { mutate: deleteTodo } = useDeleteTodo();
-
-  if (isPending) {
-    return <div>Loading...</div>;
-  }
-
-  // 아래 todos에 오류뜬 이유는 error일때 보장이 안되니까 isError까지 처리!! error일때는 todos가 undefine일수밖에없다
-  if (isError) {
-    return <div>Error...</div>;
-  }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -38,126 +29,24 @@ const TodoListPage = () => {
     addTodo({ title, contents, isDone: false });
   };
 
-  const handleSwitch = ({
-    todoId,
-    isDone,
-  }: {
-    todoId: number;
-    isDone: boolean;
-  }) => {
-    switchTodo({
-      todoId,
-      isDone,
-    });
-  };
-
-  const handleDeleted = (todoId: number) => {
-    deleteTodo(todoId);
-  };
-
   return (
     <div>
       <h1>Next TodoList</h1>
 
-      <form className="flex gap=2" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="제목"
-          className="border boerder-gray-300 p-4 rounded-md mb-2"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="내용"
-          className="border boerder-gray-300 p-4 rounded-md mb-2"
-          value={contents}
-          onChange={(e) => setContents(e.target.value)}
-        />
-        <button
-          type="submit"
-          className="border boerder-gray-300 p-4 rounded-md mb-2"
-        >
-          추가
-        </button>
-      </form>
+      <TodoForm
+        title={title}
+        contents={contents}
+        setTitle={setTitle}
+        setContents={setContents}
+        handleSubmit={handleSubmit}
+      />
 
-      <div>
-        <h3>완료목록</h3>
+      {/* 하나의 component를 두번 재활용하였다 */}
+      {/* 완료목록 */}
+      <List listFor="done" />
 
-        {todos
-          .filter((todo) => todo.isDone === true)
-          .map((todo) => {
-            return (
-              <div
-                key={todo.id}
-                className="border boerder-gray-300 p-4 rounded-md mb-2"
-              >
-                <h2>{todo.title}</h2>
-                <p>{todo.contents}</p>
-                <div className="flex gap-2">
-                  <button
-                    className="bg-blue-500 text-white px-2 py-1 rounded-md "
-                    onClick={() => {
-                      handleSwitch({
-                        todoId: todo.id,
-                        isDone: !todo.isDone,
-                      });
-                    }}
-                  >
-                    {/* {todo.isDone ? "취소" : "완료"} */}
-                    취소
-                  </button>
-                  <button
-                    className="bg-blue-500 text-white px-2 py-1 rounded-md "
-                    onClick={() => {
-                      handleDeleted(todo.id);
-                    }}
-                  >
-                    삭제
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-      </div>
-      <div>
-        <h3>할일목록</h3>
-        {todos
-          .filter((todo) => !todo.isDone)
-          .map((todo) => {
-            return (
-              <div
-                key={todo.id}
-                className="border boerder-gray-300 p-4 rounded-md mb-2"
-              >
-                <h2>{todo.title}</h2>
-                <p>{todo.contents}</p>
-                <div className="flex gap-2">
-                  <button
-                    className="bg-blue-500 text-white px-2 py-1 rounded-md "
-                    onClick={() => {
-                      handleSwitch({
-                        todoId: todo.id,
-                        isDone: !todo.isDone,
-                      });
-                    }}
-                  >
-                    완료
-                  </button>
-                  <button
-                    className="bg-red-500 text-white px-2 py-1 rounded-md "
-                    onClick={() => {
-                      handleDeleted(todo.id);
-                    }}
-                  >
-                    삭제
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-      </div>
+      {/* Todo를 위한 목록 */}
+      <List listFor="todo" />
     </div>
   );
 };
